@@ -3,8 +3,18 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Class for handling the input data
+ */
 public class InputHandler {
 
+    /**
+     * Converts the coordinates of the input file into an according
+     * 2-dimensional ArrayList with equivalent rows and columns
+     * @param filename filename of the input data
+     * @return 2d ArrayList, with every inner lists representing
+     * one line in the input data file with the according coordinates.
+     */
     public ArrayList<ArrayList<Integer>> readCoordinates(String filename){
 
         ArrayList<ArrayList<Integer>> coordsOfInitalLines = new ArrayList<>();
@@ -30,7 +40,7 @@ public class InputHandler {
                 coordsOfInitalLines.add(lineCoords);
 
             }
-            System.out.println("Extraction of coordinates from file has been successfull.");
+            System.out.println("Extraction of coordinates from file has been successful.");
 
         } catch (FileNotFoundException FnFexception){
             System.err.println("No file found ! " + filename);
