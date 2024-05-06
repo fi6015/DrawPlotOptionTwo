@@ -177,7 +177,7 @@ public class LineCrafter {
 
     /**
      * Checks if the remaining list contains a circular structure and has only connectors
-     * @param singlePointsAndConnectors
+     * @param singlePointsAndConnectors contains the available points and their types
      * @return true if there are only connectors left to use, false otherwise
      */
     private boolean isCricle(ArrayList<Point> singlePointsAndConnectors) {
@@ -455,7 +455,7 @@ public class LineCrafter {
      * Sorts a list of polylines based on their length in descending order.
      * The length of a polyline is the sum of the lengths of the lines that it is build of.
      * @param linienzuege List of polylines, where each polyline consists of multiple points.
-     * @return List of polylines sorted in descending order based on their length.
+     * @return Map of polylines sorted in descending order based on their length.
      */
     public Map<Double, ArrayList<Point>> sortLinienzuege (ArrayList<ArrayList<Point>> linienzuege){
 
