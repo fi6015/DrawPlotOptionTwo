@@ -13,7 +13,8 @@ public class Point {
     private final int y;
     // type of the point. default is 5, if the type has not yet been determined.
     // type 1 = singePoint (SP) (once occurrence), type 2 = Connector (CN) (two occurrences) (already used once),
-    // type 3 = Connector (CN) (two occurrences) (never used) , type 4 = Terminator (TER) (three or more occurrences)
+    // type 3 = Connector (CN) (two occurrences) (never used) ,
+    // type 4 = Terminator (TER) (three or more occurrences)
     private int type;
 
 
