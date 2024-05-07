@@ -26,16 +26,8 @@ public class Main {
         // Work on a deep copy to leave the previous lists unchanged (used for checking intermediate results).
         ArrayList<ArrayList<Point>> starterListAllTypes = lineCrafter.getAllPointTypes(LineCrafter.deepCopy(starterListNotypes));
 
-        // Remove all lines that have points occurring three or more times, as no connection is made at these points.
-        ArrayList<ArrayList<Point>> starterListInitState = lineCrafter.removeTerminators(LineCrafter.deepCopy(starterListAllTypes));
-
-        // After terminators (type 4 points) and their lines are removed, the types of points that were
-        // connected to the terminators may change.
-        // Therefore, the types of points are reassigned correctly.
-        ArrayList<ArrayList<Point>> starterListFinal = lineCrafter.getAllPointTypes(LineCrafter.deepCopy(starterListInitState));
-
-        // Create a list of all points present in the cleaned starter list.
-        ArrayList<Point> singlePointsAndConnectors = lineCrafter.getSPsAndCNsAndSetStartlistTypes(starterListFinal);
+        // Create a list of all points with their correct types present in the starter list.
+        ArrayList<Point> SPandCNandTER = lineCrafter.getAllPointsAndSetStartlistTypes(starterListAllTypes);
 
         // List for temporary storage of a polyline that is currently being constructed and should be further expanded.
         ArrayList<Point> linienzugInitial = new ArrayList<>();
@@ -44,14 +36,16 @@ public class Main {
         ArrayList<ArrayList<Point>> linienzuegeInitial = new ArrayList<>();
 
 
+
         //********** Main Function **********
         // Implements a recursive algorithm that solves the problem of forming polylines.
+        // This time with the ruleset of OPTION 2 (see documentation)
+
         // The result is a list of polylines.
-        ArrayList<ArrayList<Point>> linienzuege = lineCrafter.CraftConnectedLines(starterListFinal, singlePointsAndConnectors,linienzugInitial,linienzuegeInitial);
+        ArrayList<ArrayList<Point>> linienzuege = lineCrafter.CraftConnectedLines(starterListAllTypes, SPandCNandTER,linienzugInitial,linienzuegeInitial);
 
         // For each polyline, its length is then calculated and stored together with the polyline in a map.
         // This map is then sorted in descending order, so that the longest polyline becomes the first entry.
-
         Map<Double, ArrayList<Point>> distances = lineCrafter.sortLinienzuege(linienzuege);
 
         // The results are then printed to the console.
@@ -67,6 +61,7 @@ public class Main {
 
         // Finally, a visualization is created.
         SwingUtilities.invokeLater(() -> PlotCreator.createChart(linienzuege));
+
 
     } //Main Method
 

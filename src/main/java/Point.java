@@ -80,7 +80,7 @@ public class Point {
      * @return representation of the point as a String
      */
     @Override
-    public String toString() {return "( x,y: " + x + ", " + y + ")"; }
+    public String toString() {return "( x,y: " + x + ", " + y + ")" + " type " + type; }
 
 
 }

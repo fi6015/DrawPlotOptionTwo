@@ -6,8 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="DrawPlot 06.05. 23 pm" />
         <module name="GeoMagic_Testaufgabe" />
         <module name="DrawPlot" />
+        <module name="DrawPlot Opt2 19.30 pm" />
+        <module name="DrawPlot Opt2" />
       </profile>
     </annotationProcessing>
   </component>
