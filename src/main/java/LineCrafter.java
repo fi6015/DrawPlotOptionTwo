@@ -232,9 +232,9 @@ public class LineCrafter {
      * @param starterList available lines
      * @return Point that forms a line with current point, which exists in starterList.
      */
-    public Point searchForCNorSP(ArrayList<Point> SPandCNandTER,
-                                 Point currentPoint,
-                                 ArrayList<ArrayList<Point>> starterList
+    public Point searchForPoint(ArrayList<Point> SPandCNandTER,
+                                Point currentPoint,
+                                ArrayList<ArrayList<Point>> starterList
     ) {
         for (ArrayList<Point> line : starterList) {
             for (Point otherPoint : SPandCNandTER
@@ -369,12 +369,13 @@ public class LineCrafter {
         Point currentPoint = getCurrentPoint(SPandCNandTER,linienZug);
 
         if (currentPoint.getType() == 1) {
-            Point nextPoint = searchForCNorSP(SPandCNandTER,currentPoint,starterList);
+            Point nextPoint = searchForPoint(SPandCNandTER,currentPoint,starterList);
             //For a found match (current point, next point) in starterList, the equivalent line in starterList
             // gets marked as deleted (type= 0)
             if (nextPoint.getType() == 1){
                 //No connector found, therefore there is no polyline and the simple line (SP,SP = linienzug) is added
                 // to the list of polylines as a new entry (linienzuege)
+
                 ArrayList<Point> linienzug = new ArrayList<>();
                 linienzug.add(currentPoint);
                 linienzug.add(nextPoint);
@@ -387,6 +388,7 @@ public class LineCrafter {
 
                 // recursive call with actualized list of polylines and empty linienzug
                 return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
+
             }
             if (nextPoint.getType() == 2 || nextPoint.getType()== 3){
                 // Connector has been found which triggers the elongation of the polyline
@@ -408,7 +410,7 @@ public class LineCrafter {
                 ArrayList<Point> linienzug = new ArrayList<>();
                 linienzug.add(currentPoint);
                 linienzug.add(nextPoint);
-                linienzuege.add(new ArrayList<>(linienzug)); //TODO muss das wirklich 2 mal ?
+                linienzuege.add(new ArrayList<>(linienzug));
                 linienzug.clear();
 
                 //both points get type update
@@ -417,10 +419,11 @@ public class LineCrafter {
 
                 // recursive call with actualized list of polylines and empty linienzug
                 return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
+
             }
         }
         if (currentPoint.getType() == 2 || currentPoint.getType() == 3){
-            Point nextPoint = searchForCNorSP(SPandCNandTER,currentPoint,starterList);
+            Point nextPoint = searchForPoint(SPandCNandTER,currentPoint,starterList);
             if (nextPoint.getType() == 1){
                 // Because the current point was a connector, the polyline is in the process of being built. Therefore
                 // linienZug has to be extended with next point. Because next point is a SP, it ends the polyline, and
@@ -484,15 +487,16 @@ public class LineCrafter {
                 }
             }
         } if (currentPoint.getType() >= 4){ //current point is a TER
-            Point nextPoint = searchForCNorSP(SPandCNandTER,currentPoint,starterList);
+            Point nextPoint = searchForPoint(SPandCNandTER,currentPoint,starterList);
             //case 1: next point is SP: end line and add entry to polylines
             if (nextPoint.getType() == 1){
                 //No CN or TER found, therefore there is no polyline and the simple line (TER,SP = linienzug) is added
                 // to the list of polylines as a new entry (linienzuege)
+
                 ArrayList<Point> linienzug = new ArrayList<>();
                 linienzug.add(currentPoint);
                 linienzug.add(nextPoint);
-                linienzuege.add(new ArrayList<>(linienzug)); //TODO muss das zweimal ?
+                linienzuege.add(new ArrayList<>(linienzug));
                 linienzug.clear();
 
                 //both points get type update
@@ -501,6 +505,7 @@ public class LineCrafter {
 
                 // recursive call with actualized list of polylines and empty linienzug
                 return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
+
             }
             //case 2: next point is TER: end line (TER, TER) and add entry to polylines
             else if (nextPoint.getType() >= 4) {
@@ -508,7 +513,7 @@ public class LineCrafter {
                 ArrayList<Point> linienzug = new ArrayList<>();
                 linienzug.add(currentPoint);
                 linienzug.add(nextPoint);
-                linienzuege.add(new ArrayList<>(linienzug)); //TODO muss das wirklich 2 mal ?
+                linienzuege.add(new ArrayList<>(linienzug));
                 linienzug.clear();
 
                 //both points get type update
@@ -517,6 +522,7 @@ public class LineCrafter {
 
                 // recursive call with actualized list of polylines and empty linienzug
                 return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
+
             }
             //case 3: next point is CN: elongate polyline (TER,CN) through passing it into the temporary array
             if (nextPoint.getType() == 2 || nextPoint.getType()== 3){
@@ -536,6 +542,24 @@ public class LineCrafter {
         }
         // if an error in the algorithmic logic happened
         return null;
+    }
+
+    public ArrayList<ArrayList<Point>> endLineAddLineToPolylinesUpdateTypes(Point currentPoint, Point nextPoint,
+                                              ArrayList<ArrayList<Point>> starterList, ArrayList<Point> SPandCNandTER,
+                                                                     ArrayList<ArrayList<Point>> linienzuege){
+        // make new line out of valid combination and add it to polylines
+        ArrayList<Point> linienzug = new ArrayList<>();
+        linienzug.add(currentPoint);
+        linienzug.add(nextPoint);
+        linienzuege.add(new ArrayList<>(linienzug));
+        linienzug.clear();
+
+        //both points get type update
+        updateType(SPandCNandTER,currentPoint);
+        updateType(SPandCNandTER,nextPoint);
+
+        // recursive call with actualized list of polylines and empty linienzug
+        return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
     }
 
     /**
