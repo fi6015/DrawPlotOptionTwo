@@ -510,6 +510,8 @@ public class LineCrafter {
             //case 2: next point is TER: end line (TER, TER) and add entry to polylines
             else if (nextPoint.getType() >= 4) {
 
+
+                /**
                 ArrayList<Point> linienzug = new ArrayList<>();
                 linienzug.add(currentPoint);
                 linienzug.add(nextPoint);
@@ -520,8 +522,12 @@ public class LineCrafter {
                 updateType(SPandCNandTER,currentPoint);
                 updateType(SPandCNandTER,nextPoint);
 
+
                 // recursive call with actualized list of polylines and empty linienzug
                 return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
+                 **/
+
+                return endLineAddLineToPolylinesUpdateTypes(currentPoint,nextPoint,starterList,SPandCNandTER,linienzuege);
 
             }
             //case 3: next point is CN: elongate polyline (TER,CN) through passing it into the temporary array
@@ -546,7 +552,9 @@ public class LineCrafter {
 
     public ArrayList<ArrayList<Point>> endLineAddLineToPolylinesUpdateTypes(Point currentPoint, Point nextPoint,
                                               ArrayList<ArrayList<Point>> starterList, ArrayList<Point> SPandCNandTER,
-                                                                     ArrayList<ArrayList<Point>> linienzuege){
+                                                                 ArrayList<ArrayList<Point>> linienzuege){
+
+
         // make new line out of valid combination and add it to polylines
         ArrayList<Point> linienzug = new ArrayList<>();
         linienzug.add(currentPoint);
