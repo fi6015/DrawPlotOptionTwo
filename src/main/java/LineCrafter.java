@@ -375,99 +375,31 @@ public class LineCrafter {
             if (nextPoint.getType() == 1){
                 //No connector found, therefore there is no polyline and the simple line (SP,SP = linienzug) is added
                 // to the list of polylines as a new entry (linienzuege)
-
-                /**
-                ArrayList<Point> linienzug = new ArrayList<>();
-                linienzug.add(currentPoint);
-                linienzug.add(nextPoint);
-                linienzuege.add(new ArrayList<>(linienzug));
-                linienzug.clear();
-
-                //both SP points get type update from 1 to 0 (update in staterList already happened above)
-                updateType(SPandCNandTER,currentPoint);
-                updateType(SPandCNandTER,nextPoint);
-
                 // recursive call with actualized list of polylines and empty linienzug
-                return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
-                 **/
-
                 return endLineAddLineToPolylinesUpdateTypes(currentPoint,nextPoint,starterList,SPandCNandTER,linienzuege);
-
             }
             if (nextPoint.getType() == 2 || nextPoint.getType()== 3){
-                /**
-                // Connector has been found which triggers the elongation of the polyline
-                ArrayList<Point> linienzug = new ArrayList<>();
-                linienzug.add(currentPoint);
-                linienzug.add(nextPoint);
-
-                // In this case the polyline linienzug is not added to the list of polylines (because it is not complete),
-                // but is passed to the recursive function call, to be further elongated.
-
-                updateType(SPandCNandTER,currentPoint);
-                updateType(SPandCNandTER, nextPoint);
-
-                return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
-                 **/
+                 // Connector has been found which triggers the elongation of the polyline
+                 // In this case the polyline linienzug is not added to the list of polylines (because it is not complete),
+                 // but is passed to the recursive function call, to be further elongated.
                 return startPolylineUpdateTypes(currentPoint,nextPoint,starterList,SPandCNandTER,linienzuege);
-
-            } else if (nextPoint.getType() >= 4) {
+            }
+            if (nextPoint.getType() >= 4) {
                 // next point is a terminator, meaning the line ends here
-                // therefore similar as for case nextpoint.type = 1: linienzuege gets a new entry
-
-                /**
-                ArrayList<Point> linienzug = new ArrayList<>();
-                linienzug.add(currentPoint);
-                linienzug.add(nextPoint);
-                linienzuege.add(new ArrayList<>(linienzug));
-                linienzug.clear();
-
-                //both points get type update
-                updateType(SPandCNandTER,currentPoint);
-                updateType(SPandCNandTER,nextPoint);
-
-                // recursive call with actualized list of polylines and empty linienzug
-                return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
-                 **/
+                // therefore similar as for case with nextpoint.type = 1: linienzuege gets a new entry
                 return endLineAddLineToPolylinesUpdateTypes(currentPoint,nextPoint,starterList,SPandCNandTER,linienzuege);
-
             }
         }
-        if (currentPoint.getType() == 2 || currentPoint.getType() == 3){
+        else if (currentPoint.getType() == 2 || currentPoint.getType() == 3){
             Point nextPoint = searchForPoint(SPandCNandTER,currentPoint,starterList);
             if (nextPoint.getType() == 1){
-                /**
                 // Because the current point was a connector, the polyline is in the process of being built. Therefore
                 // linienZug has to be extended with next point. Because next point is a SP, it ends the polyline, and
                 // the polyline gets added to the list of polylines.
-                linienZug.add(nextPoint);
-                linienzuege.add(new ArrayList<>(linienZug));
-                linienZug.clear();
-
-                updateType(SPandCNandTER,currentPoint);
-                updateType(SPandCNandTER,nextPoint);
-
-                // recursive call with empty linienZug means: begin with a new point to build a new poly line
-                return CraftConnectedLines(starterList,SPandCNandTER,linienZug,linienzuege);
-                 **/
-
                 return endPolylineElongationUpdateTypes(currentPoint,nextPoint,starterList,SPandCNandTER,linienzuege,linienZug);
             }
             if (nextPoint.getType() >= 4){
-                /**
                 //similar case as for type = 1; the polyline that is currently being extended ends here
-                linienZug.add(nextPoint);
-                linienzuege.add(new ArrayList<>(linienZug));
-                linienZug.clear();
-
-                updateType(SPandCNandTER,currentPoint);
-                updateType(SPandCNandTER,nextPoint);
-
-                // recursive call with empty linienZug means: begin with a new point to build a new poly line
-                // linienzuege got an extra entry
-                return CraftConnectedLines(starterList,SPandCNandTER,linienZug,linienzuege);
-                 **/
-
                 return endPolylineElongationUpdateTypes(currentPoint,nextPoint,starterList,SPandCNandTER,linienzuege,linienZug);
             }
             if (nextPoint.getType() == 2 || nextPoint.getType()== 3){
@@ -502,73 +434,24 @@ public class LineCrafter {
                     //recursive function call with the circular polyline that just started being build
                     return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
                 } else {
-                    //recursive function call with the polyline that is currently in build process
+                    //recursive function call with the polyline that was already in the elongation process
                     return CraftConnectedLines(starterList,SPandCNandTER,linienZug,linienzuege);
                 }
             }
-        } if (currentPoint.getType() >= 4){ //current point is a TER
+        } else if (currentPoint.getType() >= 4){ //current point is a TER
             Point nextPoint = searchForPoint(SPandCNandTER,currentPoint,starterList);
             //case 1: next point is SP: end line and add entry to polylines
             if (nextPoint.getType() == 1){
                 //No CN or TER found, therefore there is no polyline and the simple line (TER,SP = linienzug) is added
                 // to the list of polylines as a new entry (linienzuege)
-
-                /**
-                ArrayList<Point> linienzug = new ArrayList<>();
-                linienzug.add(currentPoint);
-                linienzug.add(nextPoint);
-                linienzuege.add(new ArrayList<>(linienzug));
-                linienzug.clear();
-
-                //both points get type update
-                updateType(SPandCNandTER,currentPoint);
-                updateType(SPandCNandTER,nextPoint);
-
-                // recursive call with actualized list of polylines and empty linienzug
-                return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
-                **/
                 return endLineAddLineToPolylinesUpdateTypes(currentPoint,nextPoint,starterList,SPandCNandTER,linienzuege);
-
             }
             //case 2: next point is TER: end line (TER, TER) and add entry to polylines
-            else if (nextPoint.getType() >= 4) {
-
-
-                /**
-                ArrayList<Point> linienzug = new ArrayList<>();
-                linienzug.add(currentPoint);
-                linienzug.add(nextPoint);
-                linienzuege.add(new ArrayList<>(linienzug));
-                linienzug.clear();
-
-                //both points get type update
-                updateType(SPandCNandTER,currentPoint);
-                updateType(SPandCNandTER,nextPoint);
-
-
-                // recursive call with actualized list of polylines and empty linienzug
-                return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
-                 **/
-
+            if (nextPoint.getType() >= 4) {
                 return endLineAddLineToPolylinesUpdateTypes(currentPoint,nextPoint,starterList,SPandCNandTER,linienzuege);
-
             }
             //case 3: next point is CN: elongate polyline (TER,CN) through passing it into the temporary array
             if (nextPoint.getType() == 2 || nextPoint.getType()== 3){
-                /**
-                // Connector has been found which triggers the elongation of the polyline
-                ArrayList<Point> linienzug = new ArrayList<>();
-                linienzug.add(currentPoint);
-                linienzug.add(nextPoint);
-
-                // In this case the polyline linienzug is not added to the list of polylines (because it is not complete),
-                // but is passed to the recursive function call, to be further elongated.
-
-                updateType(SPandCNandTER,currentPoint);
-                updateType(SPandCNandTER, nextPoint);
-
-                return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
-                 **/
                 return startPolylineUpdateTypes(currentPoint,nextPoint,starterList,SPandCNandTER,linienzuege);
             }
         }
@@ -576,6 +459,19 @@ public class LineCrafter {
         return null;
     }
 
+    /**
+     * For a given combination of points nextpoint is a point that ends the line or polyline.
+     * Thus this line/polyline is added to the list of polylines. This updated list linienzuege
+     * is then passed together with a empty list linienzug to a recursive function call to
+     * CraftConnectedLines(). This triggers the building process of a new line/polyline in
+     * CraftConnectedLines(). Types are updated accordingly.
+     * @param currentPoint point can be SP, CN, TER
+     * @param nextPoint the type of this point SP or TER
+     * @param starterList list of all lines from input.txt
+     * @param SPandCNandTER list of all points with their types
+     * @param linienzuege list of found polylines so far
+     * @return
+     */
     public ArrayList<ArrayList<Point>> endLineAddLineToPolylinesUpdateTypes(Point currentPoint, Point nextPoint,
                                               ArrayList<ArrayList<Point>> starterList, ArrayList<Point> SPandCNandTER,
                                                                  ArrayList<ArrayList<Point>> linienzuege){
@@ -596,16 +492,25 @@ public class LineCrafter {
         return CraftConnectedLines(starterList,SPandCNandTER,linienzug,linienzuege);
     }
 
+    /**
+     * For a given combination of points nextpoint is a point that ends the line or polyline.
+     * Because the current point was a connector, the polyline is in the process of being built. Therefore
+     * linienZug has to be extended with next point. Because next point is a SP/TER, it ends the polyline, and
+     * the polyline gets added to the list of polylines. Types get updated accordingly.
+     * CraftConnectedLines() is called recursively with an additional element in the list of polylines
+     * and an empty temporary polyline list.
+     * @param currentPoint CN
+     * @param nextPoint the type of this point SP or TER
+     * @param starterList list of all lines from input.txt
+     * @param SPandCNandTER list of all points with their types
+     * @param linienzuege list of found polylines so far
+     * @return
+     */
     public ArrayList<ArrayList<Point>> endPolylineElongationUpdateTypes(Point currentPoint, Point nextPoint,
                                                                 ArrayList<ArrayList<Point>> starterList,
                                                                 ArrayList<Point> SPandCNandTER,
                                                                 ArrayList<ArrayList<Point>> linienzuege,
                                                                         ArrayList<Point> linienZug ){
-
-        // Because the current point was a connector, the polyline is in the process of being built. Therefore
-        // linienZug has to be extended with next point. Because next point is a SP/TER, it ends the polyline, and
-        // the polyline gets added to the list of polylines.
-
         linienZug.add(nextPoint);
         linienzuege.add(new ArrayList<>(linienZug));
         linienZug.clear();
@@ -615,19 +520,25 @@ public class LineCrafter {
         return CraftConnectedLines(starterList,SPandCNandTER,linienZug,linienzuege);
     }
 
+    /**
+     * A Connector has been found which triggers the starting of a polyline build process, by passing a filled
+     * linienzug to the recursive function call CraftConnectedLines().
+     * In this case the line (linienzug) is made out of the two fitting points and is not added
+     * to the list of polylines but is passed for elongation as linienzug.
+     * @param currentPoint can be SP or TER
+     * @param nextPoint is CN
+     * @param starterList list of all lines from input.txt
+     * @param SPandCNandTER list of all points with their types
+     * @param linienzuege list of found polylines so far
+     * @return
+     */
     public ArrayList<ArrayList<Point>> startPolylineUpdateTypes(Point currentPoint, Point nextPoint,
                                                                 ArrayList<ArrayList<Point>> starterList,
                                                                 ArrayList<Point> SPandCNandTER,
                                                                 ArrayList<ArrayList<Point>> linienzuege){
-
-
-        // Connector has been found which triggers the starting of a polyline
         ArrayList<Point> linienzug = new ArrayList<>();
         linienzug.add(currentPoint);
         linienzug.add(nextPoint);
-
-        // In this case the polyline linienzug is not added to the list of polylines (because it is not complete),
-        // but is passed to the recursive function call, to be further elongated.
 
         updateType(SPandCNandTER,currentPoint);
         updateType(SPandCNandTER, nextPoint);
@@ -650,7 +561,6 @@ public class LineCrafter {
         //Squaring always results in a positive number
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
-
 
     /**
      * Sorts a list of polylines based on their length in descending order.
