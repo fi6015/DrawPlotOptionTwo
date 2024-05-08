@@ -2,6 +2,12 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Creates a visualization of polylines that have been composed of lines from the input.txt data,
+ * under consideration of specific constrains from the task definition.
+ * Measures the distance of the calculated polylines and prints them to console in a descending order,
+ * and together with the point coordinates that build the polyline.
+ */
 public class Main {
     public static void main(String[] args) {
 
@@ -38,7 +44,7 @@ public class Main {
 
         //********** Main Function **********
         // Implements a recursive algorithm that solves the problem of forming polylines.
-        // This time with the ruleset of OPTION 2 (see documentation)
+        // This time with the ruleset of OPTION 2 (see documentation) including Terminators in the polylines.
 
         // The result is a list of polylines.
         ArrayList<ArrayList<Point>> linienzuege = lineCrafter.CraftConnectedLines(starterListAllTypes, SPandCNandTER,linienzugInitial,linienzuegeInitial);
@@ -57,12 +63,9 @@ public class Main {
             counter++;
         }
 
-
         // Finally, a visualization is created.
         SwingUtilities.invokeLater(() -> PlotCreator.createChart(linienzuege));
 
-
     } //Main Method
-
 
 } //Class

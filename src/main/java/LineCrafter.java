@@ -62,6 +62,7 @@ public class LineCrafter {
 
     /**
      * Counts the frequency of each point in the given list and sets the type of the point based on its frequency.
+     * (For explanation if types see also Point class)
      * If the point is compared with itself, the counter does not increase.
      * Type 1 = Point occurs exactly once (single point SP)
      * Type 3 = Point occurs exactly twice (connector point CN)
@@ -153,11 +154,11 @@ public class LineCrafter {
 
     /**
      * Checks for a list of points whether all have type 0 and therefore have been used.
-     * @param singlePointsAndConnectors List of points
+     * @param SPandCNandTER List of points
      * @return true if all points have type 0 and have been used, false otherwise.
      */
-    private boolean allPointsAreUsed(ArrayList<Point> singlePointsAndConnectors) {
-        for (Point point : singlePointsAndConnectors) {
+    private boolean allPointsAreUsed(ArrayList<Point> SPandCNandTER) {
+        for (Point point : SPandCNandTER) {
             if (point.getType() != 0) {
                 return false;
             }
@@ -167,11 +168,11 @@ public class LineCrafter {
 
     /**
      * Checks if the remaining list contains a circular structure and has only connectors
-     * @param singlePointsAndConnectors contains the available points and their types
+     * @param SPandCNandTER contains the available points and their types
      * @return true if there are only connectors left to use, false otherwise
      */
-    private boolean isCricle(ArrayList<Point> singlePointsAndConnectors) {
-        for (Point point : singlePointsAndConnectors) {
+    private boolean isCricle(ArrayList<Point> SPandCNandTER) {
+        for (Point point : SPandCNandTER) {
             if (point.getType() != 2 && point.getType() != 3 && point.getType() != 0) {
                 return false;
             }
@@ -289,7 +290,7 @@ public class LineCrafter {
      * If the point is an SP (type 1) and has been used, it now receives (type 0).
      * If the point is a CN and has never been used (type 3), it now receives type 2 after being used once.
      * If the connector point has already been used once (type 2), it is marked as no longer available (type 0).
-     * For details on update logic for TER, see documentation for the getAllPointTypes() function.
+     * For details on update logic for TER, see documentation for the the pint class or getAllPointTypes() function.
      * Example update of TER (connectivity = 3 therefore initial type = 6) goes as following: 6 -> 5 -> 4 -> 0
      * @param SPandCNandTER contains available points with types
      * @param currentPoint current point whose type is being updated.
@@ -326,21 +327,21 @@ public class LineCrafter {
      * Recursive algorithm for forming polylines including terminators (option 2).
      * It starts with a valid point from SPandCNandTER for which another point is found so that
      * these two points form a line that exists in starterList. The line is marked as deleted in starterList
-     * by setting their points to type 0. The found line is either of type SP-SP, or SP-TER, or TER-SP or TER-TER.
-     * then the line ends, and a recursive callto the function is made,where the list of polylines(linienzuege) has
+     * by setting their points to type 0. If the found line is either of type SP-SP, or SP-TER, or TER-SP or TER-TER.
+     * then the line ends, and a recursive call to the function is made,where the list of polylines(linienzuege) has
      * increased by one entry.
      * If the found line is of type SP-CN, or TER-CN points are further searched for, that extend the line until an
      * SP or TER is found, that completes the polyline (linienzug). This is then added to polylines (linienzuege).
      * (For the case that there are no SPs and TERs, the line starts with a CN. If it starts with a CN and there are only CNs,
      * this means it must be a type of circular structure, which will also be found then.)
      * All points are updated in type after their use, with connectors being able to be used twice. And terminators can
-     * also be used multiple times, depending on their connectivity. For the given example data they can be used three times.
-     * Thus, with each recursive call, the algorithm approaches the base case, as the types are reduced.
+     * also be used multiple times, depending on their connectivity. For the given example data input.txt they can be used
+     * three times. Thus, with each recursive call, the algorithm approaches the base case, as the types are reduced.
      * The base case is reached when all points have been used sufficiently often and have reached type 0.
      * Then the list of polylines is returned.
      * @param starterList holds all initial standard lines from the input file.
      *                   point types here are all 1, and will be set to 0 after the line has been used.
-     * @param SPandCNandTER contains all SPs an CN and TER from starterList with their types.
+     * @param SPandCNandTER contains all SPs an CNs and TERs from starterList with their types.
      * @param linienZug temporal container for the poly line that is being build
      * @param linienzuege list of polylines crafted so far
      * @return complete list of all polylines that have been found (linienzuege),

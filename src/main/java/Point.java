@@ -4,6 +4,19 @@
  * The Point also has a type that specifies its frequency of occurrence
  * in the initial input data list. Later the type is modified and used
  * to determine the points availability for building lines.
+ *
+ * Explanation of point types: (see also getAllPointTypes() in LineCrafter class)
+ * Type 1 = Point occurs exactly once (single point SP) (after usage it gets type 0)
+ * Type 3 = Point occurs exactly twice (connector point CN)
+ *          later if a connector has been used once, it gets type 2 (after second usage it gets type 0)
+ * Types for Terminators: initially 6 or upward, depending on the connectivity of the TER.
+ * Connectivity of a point means its number of occurrence in the input.txt data. The type for a terminator is then set
+ * to such a number, that the terminator can then be used as many times as it occurs, and then gets set to type 0.
+ * Assuming that every time the TER point has been used, its type is reduced by one.
+ * (But in the last step it gets from 4 to zero.)
+ * For the given input.txt data example TERs just have the initial type of 6.
+ * The evolution is 6 -> 5 -> 4 -> 0.
+ * This type solution concept is for data that has terminators from which more than three lines originate.
  */
 public class Point {
 
@@ -11,10 +24,7 @@ public class Point {
     private final int x;
     // y coordinate
     private final int y;
-    // type of the point. default is 5, if the type has not yet been determined.
-    // type 1 = singePoint (SP) (once occurrence), type 2 = Connector (CN) (two occurrences) (already used once),
-    // type 3 = Connector (CN) (two occurrences) (never used) ,
-    // type 4 = Terminator (TER) (three or more occurrences)
+    // for type explanation see documentation
     private int type;
 
 
@@ -81,7 +91,7 @@ public class Point {
      * @return representation of the point as a String
      */
     @Override
-    public String toString() {return "( x,y: " + x + ", " + y + ")" + " type " + type; }
+    public String toString() {return "( x,y: " + x + ", " + y + ")"; }
 
 
 }
