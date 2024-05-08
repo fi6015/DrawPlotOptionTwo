@@ -36,7 +36,6 @@ public class Main {
         ArrayList<ArrayList<Point>> linienzuegeInitial = new ArrayList<>();
 
 
-
         //********** Main Function **********
         // Implements a recursive algorithm that solves the problem of forming polylines.
         // This time with the ruleset of OPTION 2 (see documentation)
