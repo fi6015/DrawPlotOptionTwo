@@ -134,17 +134,13 @@ public class LineCrafter {
                     SPandCNandTER.add(new Point(point.getX(), point.getY(), point.getType()));
                     point.setType(1);
                 } else if (pointType == 3){
-                    if (SPandCNandTER.contains(point)){ //equals method of point is called.
-                        // if a point with the same x,y is already there, skip the step of adding the point
-                        continue;
-                    } else {
+                    // if a point with the same x,y is already there, skip the step of adding the point
+                    if (!SPandCNandTER.contains(point)){ //equals method of point is called.
                         SPandCNandTER.add(new Point(point.getX(), point.getY(), point.getType()));
                         point.setType(1);
                     }
                 } else if (pointType >= 6) {
-                    if (SPandCNandTER.contains(point)){
-                        continue;
-                    } else {
+                    if (!SPandCNandTER.contains(point)){
                         SPandCNandTER.add(new Point(point.getX(),point.getY(), point.getType()));
                         point.setType(1);
                     }
@@ -460,6 +456,7 @@ public class LineCrafter {
     }
 
     /**
+     * Method is called inside of CraftConnectedLines() and calls that same function recursively.
      * For a given combination of points nextpoint is a point that ends the line or polyline.
      * Thus this line/polyline is added to the list of polylines. This updated list linienzuege
      * is then passed together with a empty list linienzug to a recursive function call to
@@ -470,7 +467,7 @@ public class LineCrafter {
      * @param starterList list of all lines from input.txt
      * @param SPandCNandTER list of all points with their types
      * @param linienzuege list of found polylines so far
-     * @return
+     * @return linienzuege from CraftConnectedLines()
      */
     public ArrayList<ArrayList<Point>> endLineAddLineToPolylinesUpdateTypes(Point currentPoint, Point nextPoint,
                                               ArrayList<ArrayList<Point>> starterList, ArrayList<Point> SPandCNandTER,
@@ -493,6 +490,7 @@ public class LineCrafter {
     }
 
     /**
+     * Method is called inside of CraftConnectedLines() and calls that same function recursively.
      * For a given combination of points nextpoint is a point that ends the line or polyline.
      * Because the current point was a connector, the polyline is in the process of being built. Therefore
      * linienZug has to be extended with next point. Because next point is a SP/TER, it ends the polyline, and
@@ -504,7 +502,7 @@ public class LineCrafter {
      * @param starterList list of all lines from input.txt
      * @param SPandCNandTER list of all points with their types
      * @param linienzuege list of found polylines so far
-     * @return
+     * @return linienzuege from CraftConnectedLines()
      */
     public ArrayList<ArrayList<Point>> endPolylineElongationUpdateTypes(Point currentPoint, Point nextPoint,
                                                                 ArrayList<ArrayList<Point>> starterList,
@@ -521,6 +519,7 @@ public class LineCrafter {
     }
 
     /**
+     * Method is called inside of CraftConnectedLines() and calls that same function recursively.
      * A Connector has been found which triggers the starting of a polyline build process, by passing a filled
      * linienzug to the recursive function call CraftConnectedLines().
      * In this case the line (linienzug) is made out of the two fitting points and is not added
@@ -530,7 +529,7 @@ public class LineCrafter {
      * @param starterList list of all lines from input.txt
      * @param SPandCNandTER list of all points with their types
      * @param linienzuege list of found polylines so far
-     * @return
+     * @return linienzuege from CraftConnectedLines()
      */
     public ArrayList<ArrayList<Point>> startPolylineUpdateTypes(Point currentPoint, Point nextPoint,
                                                                 ArrayList<ArrayList<Point>> starterList,
